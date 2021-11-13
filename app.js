@@ -1,7 +1,4 @@
-const client = contentful.createClient({
-  space: "d465js3a0u0sn",
-  accessToken: "8AzWp42X083VCxO4S5-H4k_Ix84-74klw-SmZ--bobQ",
-});
+
 
 const cartBtn = document.querySelector(".cart-btn");
 const closeCartBtn = document.querySelector(".close-cart");
@@ -20,9 +17,15 @@ class Products {
   //get all products from database, it is called in the DOMContentLoaded event
   async getProducts() {
     try {
+
+// let content = await client.getEntries();
+
+
       let result = await fetch("products.json");
       let data = await result.json();
-      let products = data.items.map((item) => {
+      let products = data.items;
+
+      products = products.map((item) => {
         const { title, price } = item.fields;
         const { id } = item.sys;
         const image = item.fields.image.fields.file.url;
@@ -65,8 +68,8 @@ class UI {
   getBagButton() {
     // (1) get all the 'add to cart' buttons on all pictures of products on homePage. It'll return a NodeList
     //      but  converted to an array using [] and ...
-    // (2) reassigning it to another variable. LAthough there's no need for this
-    // (3) reassigning it to another variable. LAthough there's no need for this
+    // (2) reassigning it to another variable. Although there's no need for this
+    // (3) reassigning it to another variable. Although there's no need for this
     // (4) for each btn, get the id of each btn and set ti "id"
     // (5) find the btn from the existing cart using the 'id' and return the product
     // (6) if it's in the cart, disable the button and change the text
@@ -271,9 +274,9 @@ document.addEventListener("DOMContentLoaded", () => {
   //get all products
   products
     .getProducts()
-    .then((product) => {
-      ui.displayProducts(product);
-      Storage.saveProducts(product);
+    .then((products) => {
+      ui.displayProducts(products);
+      Storage.saveProducts(products);
     })
     .then(() => {
       ui.getBagButton();
